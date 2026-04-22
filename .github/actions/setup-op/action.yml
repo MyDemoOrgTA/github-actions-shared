@@ -1,38 +1,38 @@
-name: 'Setup 1Password'
-description: 'Installs op CLI and configures service account authentication'
+# name: 'Setup 1Password'
+# description: 'Installs op CLI and configures service account authentication'
 
-inputs:
-  op-service-account-token:
-    description: 'The 1Password service account token'
-    required: true
+# inputs:
+#   op-service-account-token:
+#     description: 'The 1Password service account token'
+#     required: true
 
-runs:
-  using: "composite"
-  steps:
-    - name: Install 1Password CLI
-      uses: 1password/install-cli-action@v1
+# runs:
+#   using: "composite"
+#   steps:
+#     - name: Install 1Password CLI
+#       uses: 1password/install-cli-action@v1
 
-    - name: Ensure op is in PATH
-      shell: bash
-      run: |
-        OP_BIN=$(which op 2>/dev/null || true)
-        if [ -z "$OP_BIN" ]; then
-          echo "::error::op CLI not found after install"
-          exit 1
-        fi
-        echo "$(dirname "$OP_BIN")" >> $GITHUB_PATH
+#     - name: Ensure op is in PATH
+#       shell: bash
+#       run: |
+#         OP_BIN=$(which op 2>/dev/null || true)
+#         if [ -z "$OP_BIN" ]; then
+#           echo "::error::op CLI not found after install"
+#           exit 1
+#         fi
+#         echo "$(dirname "$OP_BIN")" >> $GITHUB_PATH
 
-    - name: Configure 1Password
-      uses: 1password/load-secrets-action/configure@v2
-      with:
-        service-account-token: ${{ inputs.op-service-account-token }}
+#     - name: Configure 1Password
+#       uses: 1password/load-secrets-action/configure@v2
+#       with:
+#         service-account-token: ${{ inputs.op-service-account-token }}
 
-    - name: Verify Setup + Print Policy
-      shell: bash
-      run: |
-        op --version
-        echo "--------------------------------------"
-        echo "✅ 1Password CLI ready"
-        echo "⛔ POLICY: Never use 'op read' in workflows"
-        echo "✅ USE: load-secrets-action OR op run --"
-        echo "--------------------------------------"
+#     - name: Verify Setup + Print Policy
+#       shell: bash
+#       run: |
+#         op --version
+#         echo "--------------------------------------"
+#         echo "✅ 1Password CLI ready"
+#         echo "⛔ POLICY: Never use 'op read' in workflows"
+#         echo "✅ USE: load-secrets-action OR op run --"
+#         echo "--------------------------------------"
